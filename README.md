@@ -1,7 +1,7 @@
 # w251-fall2021-project
 Final Project for Fall 2021
 
-1. Start up EC2 instance with NVIDIA Deep Learning AMI.
+1. Start up EC2 instance (g4pn.2xlarge) with NVIDIA Deep Learning AMI and 500 GB - EBS storage.
 
 2. Open Docker container  
 ```docker run --gpus all -it --rm -p 8888:8888 --shm-size=2048m -v "$PWD":/workspace/ nvcr.io/nvidia/pytorch:21.09-py3```
