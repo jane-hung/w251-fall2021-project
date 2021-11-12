@@ -1,14 +1,7 @@
-# get into right directory
-cd ../data
+
 
 # jetson inference
-git clone https://github.com/dusty-nv/jetson-inference.git
-
-# opencv + pandas etc.
-pip install -r requirements.txt
-
-# get pytorch-ssd repo
-git clone https://github.com/qfgaohao/pytorch-ssd.git
+# git clone https://github.com/dusty-nv/jetson-inference.git
 
 # move into pytorch-ssd repo
 cd pytorch-ssd
@@ -38,6 +31,12 @@ cd ../..
 # get the right imageset
 python vision/datasets/generate_vocdata.py labels.txt /data/w251-fall2021-project/pytorch-ssd/data/helmet
 
-# for cv2 error --> ImportError: libGL.so.1: cannot open shared object file: No such file or directory
-apt-get update
-apt-get install ffmpeg libsm6 libxext6  -y
+# # get into right directory
+# cd ../data/w251-fall2021-project/
+
+# # opencv + pandas etc.
+# pip install -r requirements.txt
+
+# # for cv2 error --> ImportError: libGL.so.1: cannot open shared object file: No such file or directory
+# apt-get update
+# apt-get install ffmpeg libsm6 libxext6  -y
