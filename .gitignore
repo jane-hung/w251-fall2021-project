@@ -1,5 +1,9 @@
 # ML Files
 data/
+models/
+
+# Jupyter notebook files
+.ipynb_checkpoints
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
