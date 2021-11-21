@@ -3,10 +3,13 @@ import os
 import logging
 import sys
 import itertools
+import numpy as np
+import time
 
 import torch
 from torch.utils.data import DataLoader, ConcatDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, MultiStepLR
+from torch.utils.tensorboard import SummaryWriter
 
 from vision.utils.misc import str2bool, Timer, freeze_net_layers, store_labels
 from vision.ssd.ssd import MatchPrior
@@ -135,8 +138,15 @@ if args.use_cuda and torch.cuda.is_available():
     torch.backends.cudnn.benchmark = True
     logging.info("Use Cuda.")
 
+# # TODO debug Visible Deprecation Warning
+# np.warnings.filterwarnings('error', category=np.VisibleDeprecationWarning)                  
 
+# enable tensorboard
+writer = SummaryWriter(log_dir="/data/runs/" + time.strftime("%Y%m%d_%H%M%S") +"/")
+# keeps track of when training and validation occur for tensorboard
+global_step = 0
 def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1):
+    global global_step
     net.train(True)
     running_loss = 0.0
     running_regression_loss = 0.0
@@ -167,6 +177,12 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1):
                 f"Average Regression Loss {avg_reg_loss:.4f}, " +
                 f"Average Classification Loss: {avg_clf_loss:.4f}"
             )
+            # add metrics to tensorboard
+            writer.add_scalar("loss/train", avg_loss, global_step = global_step)
+            writer.add_scalar("reg_loss/train", avg_reg_loss, global_step = global_step)
+            writer.add_scalar("clf_loss/train", avg_clf_loss, global_step = global_step)
+            global_step += 1
+
             running_loss = 0.0
             running_regression_loss = 0.0
             running_classification_loss = 0.0
@@ -361,6 +377,11 @@ if __name__ == '__main__':
                 f"Validation Regression Loss {val_regression_loss:.4f}, " +
                 f"Validation Classification Loss: {val_classification_loss:.4f}"
             )
+            # add metrics to tensorboard
+            writer.add_scalar("loss/val", val_loss, global_step = global_step)
+            writer.add_scalar("reg_loss/val", val_regression_loss, global_step = global_step)
+            writer.add_scalar("clf_loss/val", val_classification_loss, global_step = global_step)
+            global_step += 1
             model_path = os.path.join(args.checkpoint_folder, f"{args.net}-Epoch-{epoch}-Loss-{val_loss}.pth")
             net.save(model_path)
             logging.info(f"Saved model {model_path}")
