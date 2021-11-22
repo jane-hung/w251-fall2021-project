@@ -42,3 +42,16 @@ Final Project for Fall 2021
 | --- | --- | --- |
 |`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.01 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial0/` | Initial Run | Val Loss @ Epoch 85 = 2.7810 |
 `python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.0001 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial1/` | Decreased LR from 0.01 to 0.0001 | Val Loss @ Epoch 85 = 
+
+
+
+# Running in Jetson
+
+1. Download github repository git clone https://github.com/smlblr/Real-Time-Detection-of-People-not-Wearing-Hardhat real-time-hardhat
+2. Install the pytorch ssd (required for project). git clone https://github.com/qfgaohao/pytorch-ssd.git and copy the vision folder into real-time-hardhat
+3. pip install torchvision==0.10.0
+4. python3 detect_hardhat_video_webcam_demo.py --net-type=mb1-ssd --model=model/hardhat.pth --label=model/labels.txt
+
+You should see an screen like the one below
+
+![example of helmet detection](https://github.com/janehung04/w251-fall2021-project/blob/master/Screenshot%20from%202021-11-21%2020-57-08.png)
