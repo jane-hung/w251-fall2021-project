@@ -13,27 +13,27 @@ Final Project for Fall 2021
 4. Open Docker container  
 ```docker run --gpus all -it --rm -p 8888:8888 --shm-size=2048m -v "$PWD":/data/ nvcr.io/nvidia/pytorch:21.09-py3```
 
-5. Move to the right directory in the Docker container
+5. Move to the right directory in the Docker container  
 ```cd ../data```
 
-6. opencv + pandas etc.
+6. Intsall requirements: opencv + pandas etc.  
 `pip install -r requirements.txt`
 
-7. convert PNG to JPG
+7. Convert PNG to JPG  
 `cd pytorch-ssd`
 `python png_to_jpg.py data/helmet/`
 
-8. get the right imageset
+8. Get the right imageset, which designates train/test/val splits  
 `python vision/datasets/generate_vocdata.py labels.txt /data/pytorch-ssd/data/helmet`
 
-9. for cv2 error --> ImportError: libGL.so.1: cannot open shared object file: No such file or directory
+9. Additional system requirements: for cv2 error --> ImportError: libGL.so.1: cannot open shared object file: No such file or directory  
 `apt-get update`
 `apt-get install ffmpeg libsm6 libxext6  -y`
 
 10. Retrain using these images  
 ```python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.01 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001  --batch_size 5```
 
-11. New docker image used  
+11. New docker image used. Use on EC2 instance that is has been stopped.
 ```docker run --gpus all -it --rm -p 6006:6006 --shm-size=2048m -v "$PWD":/data/ jhung16/w251:latest```
 
 12. Experiments:
@@ -41,9 +41,11 @@ Final Project for Fall 2021
 | command | notes | results |
 | --- | --- | --- |
 |`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.01 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial0/` | Initial Run | Val Loss @ Epoch 85 = 2.7810 |
-`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.0001 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial1/` | Decreased LR from 0.01 to 0.0001 | Val Loss @ Epoch 85 = 2.9807  
-`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net vgg16-ssd --pretrained_ssd models/vgg16-ssd-mp-0_7726.pth --scheduler cosine --lr 0.0001 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial2/` | Switch to use pretrained vgg16-ssd | Val Loss @ Epoch 85 = 2.4852
+`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net mb1-ssd --pretrained_ssd models/mobilenet-v1-ssd-mp-0_675.pth --scheduler cosine --lr 0.0001 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial1/` | Decreased LR from 0.01 to 0.0001 | Val Loss @ Epoch 85 = 2.9807  |
+`python train_ssd.py --dataset_type voc --datasets /data/pytorch-ssd/data/helmet --validation_dataset /data/pytorch-ssd/data/helmet --net vgg16-ssd --pretrained_ssd models/vgg16-ssd-mp-0_7726.pth --scheduler cosine --lr 0.0001 --t_max 100 --validation_epochs 5 --num_epochs 100 --base_net_lr 0.001 --batch_size 5 --checkpoint_folder models/trial2/` | Switch to use pretrained vgg16-ssd | Val Loss @ Epoch 85 = 2.4852 |
 
+14. Migrate model artifacts after each experiment to public s3 bucket:  
+```aws s3 cp pytorch-ssd/models/trial2/ s3://jh-w251/helmet-final-project/trial2/ --recursive```
 
 # Running in Jetson
 
