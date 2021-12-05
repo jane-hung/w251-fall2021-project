@@ -231,13 +231,13 @@ class RandomSampleCrop(object):
         self.sample_options = (
             # using entire original input image
             None,
-            # # sample a patch s.t. MIN jaccard w/ obj in .1,.3,.4,.7,.9
-            # (0.1, None),
-            # (0.3, None),
-            # (0.7, None),
-            # (0.9, None),
-            # # randomly sample a patch
-            # (None, None),
+            # sample a patch s.t. MIN jaccard w/ obj in .1,.3,.4,.7,.9
+            (0.1, None),
+            (0.3, None),
+            (0.7, None),
+            (0.9, None),
+            # randomly sample a patch
+            (None, None),
         )
 
     def __call__(self, image, boxes=None, labels=None):
