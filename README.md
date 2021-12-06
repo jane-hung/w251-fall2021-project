@@ -64,7 +64,7 @@ Current Tensorboard:
 | --- | --- | --- |
 | 1 | `python run_ssd_example.py mb1-ssd models/trial1/mb1-ssd-Epoch-85-Loss-2.9806656360626222.pth models/trial1/voc-model-labels.txt data/helmet/JPEGImages/hard_hat_workers160.jpg` | 1.2786 |
 | 2 | `python run_ssd_example.py vgg16-ssd models/trial2/vgg16-ssd-Epoch-85-Loss-2.485164252916972.pth models/trial2/voc-model-labels.txt data/helmet/JPEGImages/hard_hat_workers160.jpg` | 1.2908 |
-| default | `python run_ssd_example.py mb1-ssd models/trial_default/hardhat.pth models/trial_default/voc-model-labels.txt data/helmet/JPEGImages/hard_hat_workers160.jpg` | 1.2930 |
+| default | `python run_ssd_example.py mb1-ssd models/trial_default/hardhat.pth models/trial_default/voc-model-labels.txt data/helmet/JPEGImages/hard_hat_workers160.jpg` | 1.2756 |
 
 17. Evaluat these models on the test set
 
@@ -72,10 +72,12 @@ Current Tensorboard:
 | --- | --- | --- | --- | --- | --- |
 | 1 | `python eval_ssd.py --net mb1-ssd  --dataset /data/pytorch-ssd/data/helmet --trained_model models/trial1/mb1-ssd-Epoch-85-Loss-2.9806656360626222.pth --label_file models/trial1/voc-model-labels.txt` | 0.5744 | 0.0101 | 0.3726 | 0.3190 |
 | 2 | `python eval_ssd.py --net vgg16-ssd  --dataset /data/pytorch-ssd/data/helmet --trained_model models/trial2/vgg16-ssd-Epoch-85-Loss-2.485164252916972.pth --label_file models/trial2/voc-model-labels.txt` | 0.7986 | 0.0058 | 0.6971 | 0.5005 |
-| default | `python eval_ssd.py --net mb1-ssd  --dataset /data/pytorch-ssd/data/helmet --trained_model models/trial_default/hardhat.pth --label_file models/trial_default/voc-model-labels.txt` | 0.0043 | 8.7358e-06 | 0.0 | 0.0014 |
+| default | `python eval_ssd.py --net mb1-ssd  --dataset /data/pytorch-ssd/data/helmet --trained_model models/trial_default/hardhat.pth --label_file models/trial_default/voc-model-labels.txt` | 8.7358e-06 | 0.0 |  0.0043 | 0.0014 |
 
-
-
+18. Understand class imbalance. How many of each are labeled?  
+`python data/count_annotations.py --dataset data/helmet`  
+{'helmet': 18966, 'person': 751, 'head': 5785}  
+{'helmet': 0.7437063759705121, 'person': 0.029448670692494707, 'head': 0.22684495333699317}
 
 # Running in Jetson
 
