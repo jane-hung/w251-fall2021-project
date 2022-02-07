@@ -1,6 +1,7 @@
 # w251-fall2021-project
-Final Project for Fall 2021
-
+Final Project for Fall 2021  
+See [here](https://github.com/jane-hung/w251-fall2021-project/blob/main/w251-final-report.pdf) for the formal writeup of results.  
+  
 1. Start up EC2 instance (g4pn.xlarge) with NVIDIA Deep Learning AMI and 500 GB - EBS storage. If you are connecting to a stopped instance, skip to step 4.
 
 2. Clone project repository  
